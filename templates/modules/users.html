@@ -1,0 +1,164 @@
+{% extends 'base.html' %} {% block title %} Usuarios {% endblock title %} {%
+block content %} {% if error %}
+<script>
+  (function abrirmodal() {
+    $(function () {
+      // abrir modal
+      $("#modal_crear").appendTo("body").modal("show");
+    });
+  })();
+</script>
+{% endif %}
+
+{% if erroreditar  %}
+<script>
+  (function abrirmodal2() {
+    $(function () {
+      // abrir modal
+      $("#modal_editar-{{usuario}}").appendTo("body").modal("show");
+      
+    });
+  })();
+</script>
+{% endif %}
+
+<main class="card">
+  <div class="card-body border-bottom">
+    <h2>Usuarios</h2>
+    <!-- Filtros -->
+    <div class="row gap-row-5">
+      <div class="col-sm-12 col-md-6">
+        <label class="form-label" for="searchUsuario"></label>
+        <input
+          type="text"
+          class="form-control w-50"
+          placeholder="Buscar Usuario"
+          id="searchUsuario" 
+        />
+      </div>
+         <!-- Boton y Modal Crear Usuarios -->
+
+       {% include "/modules/modals/crear_usuarios.html" %}
+
+       <!-- Fin Boton y Modal Crear Usuarios  -->
+
+    </div>
+  </div>
+
+  {% with messages = get_flashed_messages() %} {% if messages %} {% for message
+    in messages %}
+    <div class="alert alert-success text-center alert-dismissible py-1 fade show" role="alert">
+      <strong>{{ message }}</strong>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    {% endfor %} {% endif %} {% endwith %}
+       
+  <!-- Lista de usuarios -->
+  <div class="card-dataTable table-responsive" style="padding: 5px">
+    <table class="table table-bordered table-hover" id= "tablausuario">
+      <thead>
+        <tr>
+          <th>Nombre usuario</th>
+          <th>Nombres</th>
+          <th>Apellidos</th>
+          <th>Cedula</th>
+          <th>Correo</th>
+          <th>Rol</th>
+          <th>Fecha creación</th>
+          <th>Fecha de vencimiento</th>
+          <th class="col-sticky">Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="tablabodyusuario" class="js-table-body">
+        {% for usuario in usuarios %} {% if usuario.6 %}
+        <tr class="table-danger">
+          {% else %}
+        </tr>
+
+        <tr>
+          {% endif %}
+          <td>{{usuario.0}}</td>
+          <td>{{usuario.1}}</td>
+          <td>{{usuario.2}}</td>
+          <td>{{usuario.3}}</td>
+          <td>{{usuario.4}}</td>
+          <td>{{usuario.7}}</td>
+          <td>{{usuario.5}}</td>
+          <td>{{usuario.6}}</td>
+          {% if usuario.6 %}
+          <td class="py-1 px-2" text-align="center">{% else %}</td>
+
+          <td class="py-1 px-2 col-sticky js-sticky d-flex" text-align="center">
+            {% endif %} {% if usuario.6 == None %}
+             
+            <!-- Boton y modal Editar Usuarios -->
+
+             {% include "/modules/modals/editar_usuarios.html" %}
+
+             <!-- Fin Modal Editar -->
+
+            &nbsp;
+            
+             <!-- Boton y modal Eliminar Producto -->
+
+             {% include "/modules/modals/eliminar_usuarios.html" %}
+
+             <!-- Fin Modal Eliminar -->
+
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% if erroreditar %}
+  <script type="text/javascript">
+      $("#usuario").val("{{usuario2}}");
+      $("#nombres").val("{{nombre2}}");
+      $("#apellidos").val("{{apellido2}}");
+      $("#cedula").val("{{documento2}}");
+      $("#correo").val("{{correo2}}");
+      $("#rol_crear").val("{{rol2}}");
+  </script>
+  {% endif %}
+
+  <script>
+    $(document).ready(function () {
+      $("#tablausuario").DataTable({
+        dom: "lrtip",
+        language: {
+          url: "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json",
+        },
+        order: [[7, "desc"]],
+        "columnDefs": [
+          { "searchable": false, "targets": 8 }
+        ],
+      });
+      var table = $('#tablausuario').DataTable();
+ 
+        // #myInput is a <input type="text"> element
+        $('#searchUsuario').on( 'keyup', function () {
+            table.search( this.value ).draw();
+        } );
+    });
+  </script>
+
+</main>
+
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-kQtW33rZJAHjgefvhyyzcGF3C5TFyBQBA13V1RKPf4uH+bwyzQxZ6CmMZHmNBEfJ"
+  crossorigin="anonymous"
+></script>
+
+<script src="{{ url_for('static', filename='js/validacionCrearUsuario.js') }}"></script>
+<!-- <script>
+  $("#modal_crear").on("show.bs.modal", function (event) {
+    $("#form_crear").trigger("reset");
+  });
+</script> -->
+
+{% endblock content %}

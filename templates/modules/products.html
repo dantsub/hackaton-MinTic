@@ -1,0 +1,272 @@
+{% extends 'base.html' %} {% block title %} Productos {% endblock %} {% block
+content %} {% if error %}
+<script>
+  (function abrirmodal() {
+    $(function () {
+      // abrir modal
+      $("#modalNew").modal("show");
+    });
+  })();
+</script>
+{% endif %}
+
+<!-- Filtros de la tabla -->
+<!-- <script type="text/javascript">
+  $(document).ready(function () {
+    $('#tablaprod').DataTable({
+      "language": {
+        "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"
+      },
+      "order": [
+        [0, "desc"]
+      ],
+      "lengthMenu": [
+        [5, 10, 15, 20, -1],
+        [5, 10, 15, 20, "Todos"]
+      ],
+      "pageLength": 5
+    });
+  });
+
+
+</script> -->
+
+<div class="card">
+  <div class="card-body border-bottom">
+    <h2>Productos</h2>
+    <!-- Seccion de filtros -->
+    <h4 class="card-title">Busqueda y filtros</h4>
+    <div class="row">
+      <div class="col-md-3">
+        <label class="form-label" for="Searchproducto">Busqueda producto</label>
+        <input
+          type="text"
+          class="form-control"
+          id="Searchproducto"
+          placeholder="Busqueda"
+          aria-controls="Buscar"
+        />
+      </div>
+      <div class="col-md-6">
+        <label class="form-label" for="filtroprov">Busqueda producto</label>
+        <form action="{{url_for('productos')}}" method="post">
+          <input type="hidden" name="oculto" value="filtroprov"/>
+          <div class="input-group">
+            <select class="form-select" id="filtroprov" name="provfiltro">
+              <option value="Todos">Todos</option>
+                {% for proveedor in proveedores %}
+                <option value="{{ proveedor.0 }}">{{proveedor.1}}</option>
+                {% endfor %}
+            </select>
+            <button class="btn btn-primary" type="submit">Buscar por proveedor</button>
+          </div>
+        </form>        
+        
+      </div>
+
+      <!-- Boton y Modal Crear Producto -->
+
+      {% include "/modules/modals/crear_producto.html" %}
+
+      <!-- Fin Boton y Modal Crear Producto  -->
+    </div>
+
+    <div class="row" style="padding-top: 10px; ">
+      <div class="col-md-3">
+        {% if disponibles %}
+        <form class="row g-3" action="{{url_for('productos')}}" method="post">
+          <div class="col-auto d-flex align-items-end">
+            <button type="submit" class="btn btn-primary align-self-end">
+              Regresar
+            </button>
+          </div>
+        </form>
+        {%else%}
+        <form class="row g-3" action="{{url_for('productos')}}" method="post">
+          <input type="hidden" name="oculto" value="filtrodisponibles">
+          <div class="col-auto d-flex align-items-end">
+            <button type="submit" class="btn btn-primary align-self-end">
+              Listar Disponibles
+            </button>
+          </div>
+        </form>
+        {% endif %}
+      </div>
+
+      <div class="col-md-4">
+        {% if minimos %}
+        <form class="row g-3" action="{{url_for('productos')}}" method="post">
+          <div class="col-auto d-flex align-items-end">
+            <button type="submit" class="btn btn-primary align-self-end">
+              Regresar
+            </button>
+          </div>
+        </form>
+        {%else%}
+        <form class="row g-3" action="{{url_for('productos')}}" method="post">
+          <input type="hidden" name="oculto" value="filtrominimos">
+          <div class="col-auto d-flex align-items-end">
+            <button type="submit" class="btn btn-primary align-self-end">
+              Productos debajo del minimo
+            </button>
+          </div>
+        <!-- <label class="form-check-label" for="listar-requeridos">
+          <input
+            type="checkbox"
+            class="form-check-input"
+            id="listar-requeridos"
+            value="1"
+          />
+          Listar productos por debajo del minimo
+        </label> -->
+        </form>
+        {%endif%}
+      </div>
+    </div>
+  </div>
+  <!-- Fin card-body -->
+
+  <!-- Fin seccion del filtros -->
+  {% with messages = get_flashed_messages() %} {% if messages %} {% for message
+  in messages %} {% if message != 'No se ha podido registrar la calificación del
+  producto' %}
+  <div class="alert alert-success text-center alert-dismissible py-1 fade show">
+    <span>{{ message }}</span>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+  </div>
+  {%else %}
+  <div class="alert alert-danger text-center alert-dismissible py-1 fade show">
+    <span>{{ message }}</span>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+  </div>
+  {% endif %} {% endfor %} {% endif %} {% endwith %}
+
+  <div>
+    <!-- Seccion de tabla -->
+    <div
+      class="card-dataTable table-responsive pt-0"
+      style="padding: 5px !important"
+    >
+      <div class="table-responsive table-bordered" id="Div-tablaProducto">
+        <table class="table table-hover" id="tablaprod">
+          <thead>
+            <tr>
+              <th>Codigo</th>
+              <th>Nombre</th>
+              <th>Descripcion</th>
+              <th>Proveedor</th>
+              <th>Cant. Minima</th>
+              <th>Existencia</th>
+              <th>valoración</th>
+              <th class="col-sticky">Acciones</th>
+            </tr>
+          </thead>
+          <tbody class="js-table-body" id="tablaproducto">
+            {% for producto in productos %}
+            <tr class="js-row">
+              <td>{{producto.0}}</td>
+              <td>{{producto.1}}</td>
+              <td>{{producto.2}}</td>
+              <td>{{producto.5}}</td>
+              <td>{{producto.3}}</td>
+              <td>{{producto.4}}</td>
+              {% if producto.7 is none %}
+              <td>
+                <i class="far fa-star"></i>
+              </td>
+              {% endif %} {% if producto.7 is not none %} {% if producto.7 < 2
+              %}
+              <td>
+                <i class="fa fa-star"></i>
+              </td>
+              {% endif %} {% if producto.7 >= 2 and producto.7 < 3 %}
+              <td>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+              </td>
+              {% endif %} {% if producto.7 >= 3 and producto.7 < 4 %}
+              <td>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+              </td>
+              {% endif %} {% if producto.7 >= 4 and producto.7 < 5 %}
+              <td>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+              </td>
+              {% endif %} {% if producto.7 == 5 %}
+              <td>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+              </td>
+              {% endif %} {% endif %}
+
+              <td
+                class="py-1 px-2 col-sticky js-sticky"
+                style="min-width: 127px;"
+                text-align="center"
+              >
+                <!-- Boton y modal Editar Producto -->
+
+                {% include "/modules/modals/editar_producto.html" %}
+
+                <!-- Fin Modal Editar -->
+
+                &nbsp;
+                <!-- Boton y modal Eliminar Producto -->
+
+                {% include "/modules/modals/eliminar_producto.html" %}
+
+                <!-- Fin Modal Eliminar -->
+                &nbsp;
+                <!-- Boton y modal Calificar Producto -->
+
+                {% include "/modules/modals/calificar_producto.html" %}
+
+                <!-- Fin Modal Calificacion -->
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        <!-- #fin de la tabla -->
+      </div>
+    </div>
+  </div>
+  <script>
+    $(document).ready(function () {
+      $("#tablaprod").DataTable({
+        dom: "lrtip",
+        language: {
+          url: "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json",
+        },
+        order: [[0, "desc"]],
+        "columnDefs": [
+          { "searchable": false, "targets": 7 }
+        ],
+      });
+      var table = $('#tablaprod').DataTable();
+ 
+        // #myInput is a <input type="text"> element
+        $('#Searchproducto').on( 'keyup', function () {
+            table.search( this.value ).draw();
+        } );
+      });
+  </script>
+</div>
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-kQtW33rZJAHjgefvhyyzcGF3C5TFyBQBA13V1RKPf4uH+bwyzQxZ6CmMZHmNBEfJ"
+  crossorigin="anonymous"
+></script>
+<script src="{{url_for('static', filename= 'js/productsValidate.js')}}"></script>
+{% endblock %}

@@ -1,0 +1,115 @@
+<script>
+    $(document).on('show.bs.modal','#modal_editar-{{proveedor.0}}', function () {
+        $("#menupais2 option").removeAttr('selected');
+          // Set the tag <option> attribute to 'selected'
+          $('#menupais2 option[value="{{proveedor.6}}"]').prop({defaultSelected: true});
+       });
+</script> 
+<button class="btn btn-primary table-buttons" id="editar" data-bs-toggle="modal"
+data-bs-target="#modal_editar-{{proveedor.0}}">
+<span class="fas fa-edit"></span>
+</button>
+
+<!-- / Inicio Modal Editar -->
+
+<div class="modal fade" id="modal_editar-{{proveedor.0}}" tabindex="-1" role="dialog" aria-labelledby="titulo_editar"   
+    aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="titulo_editar">Editar Proveedor</h5>
+                <button class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                    <div class="modal-body">
+                        <form id="form_editar" method= "POST" class="needs-validation" action="{{url_for('providers')}}" novalidate >
+                            <div class="form-group">
+                                <div class="col-12 my-1">
+                                    <label for="">ID Proveedor*</label>
+                                    <input type="text" class="form-control" id="id2" placeholder="ID Proveedor" value="{{proveedor.0}}" name="id2" disabled>
+                                
+                                </div>
+                                    <input type="hidden" name="oculto" value="editar">
+                                    <input type="hidden" name="oculto2" value="{{proveedor.0}}">
+
+                                <div class="col-12  mb-1">
+                                    <label for="">Nombre*</label>
+                                    <input type="text" class="form-control" id="nombre2" placeholder="Nombre" value="{{proveedor.1}}" name="nombre2" required>
+                                    <div class="invalid-feedback">
+                                        Por favor digite un Nombre
+                                    </div>
+                                    <div id="errornombre2" style="color: red">
+                                        {% if data12 %} {{data12}} {% endif %}
+                                    </div>
+
+                                </div>
+
+                                <div class="col-12 mb-1">
+                                    <label for="">Correo*</label>
+                                    <input type="email" class="form-control" id="correo2" placeholder="Email" value="{{proveedor.2}}" name="correo2" required email>
+                                    <div class="invalid-feedback">
+                                        Por favor digite un correo válido
+                                    </div>
+                                    <div id="errorcorreo2" style="color: red">
+                                        {% if data22 %} {{data22}} {% endif %}
+                                    </div>
+                                </div> 
+
+                                <div class="col-12 mb-1">
+                                    <label for="">Teléfono*</label>
+                                    <input type="text" class="form-control" id="telefono2" placeholder="Teléfono" value="{{proveedor.4}}" name="telefono2" required number>
+                                    <div class="invalid-feedback">
+                                        Por favor digite un teléfono 
+                                    </div>
+                                    <div id="errortelefono2" style="color: red">
+                                        {% if data32 %} {{data32}} {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="col-12 mb-1">
+                                    <label for="">Dirección*</label>
+                                    <input type="text" class="form-control" id="direccion2" placeholder="Dirección" value="{{proveedor.3}}" name="direccion2" required>
+                                    <div class="invalid-feedback">
+                                        Por favor digite la dirección 
+                                    </div>
+                                    <div id="errordireccion2" style="color: red">
+                                        {% if data42 %} {{data42}} {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="col-12 mb-1">
+                                    <label for="">Pais*</label>
+                                    <div>
+                                    <select
+                                        class="custom-select"
+                                        id="menupais2"
+                                        required
+                                        name="menupais2"
+                                    >
+                                        {%for i in pais%}
+                                        <option value="{{i.0}}">{{i.1}}</option>
+                                        {% endfor %}
+                                    </select>
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Por favor digite el país
+                                    </div>
+                                    <div id="errorpais2" style="color: red">
+                                        {% if data52 %} {{data52}} {% endif %}
+                                    </div>
+                                </div>
+                                
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    <button class="btn btn-primary" type="submit">
+                                        Editar Proveedor
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+        </div>
+
+    </div>
+</div>
+
+
