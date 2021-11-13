@@ -1,0 +1,77 @@
+{% extends 'modules/perfil.html' %} {%
+    block content2 %}
+
+    <div class="card-body">
+        <!----><!---->
+        <form class="mt-2">
+           <div class="row">
+              <div class="col-sm-6">
+                 <div role="group" class="form-group" id="__BVID__915">
+                    <label for="account-username" class="d-block" >Username</label>
+                    <div>
+                       <input name="username" type="text" placeholder="Username" class="form-control" id="username" disabled>
+                    </div>
+                 </div>
+              </div>
+              <div class="col-sm-6">
+                 <div role="group" class="form-group" id="__BVID__917">
+                    <label for="account-name" class="d-block" >Name</label>
+                    <div>
+                       <input name="name" type="text" placeholder="Nombre" class="form-control" id="name">
+                    </div>
+                 </div>
+              </div>
+              <div class="col-sm-6">
+                 <div role="group" class="form-group" id="__BVID__919">
+                    <label for="account-e-mail" class="d-block" id="__BVID__919__BV_label_">Sexo</label>
+                    <div>
+                     <input type="radio" class="custom-control-input" value="Femenino" id="femenino" name="femenino">
+                     <input type="radio" class="custom-control-input" value="Masculino" id="masculino" name="masculino">
+                    </div>
+                 </div>
+              </div>
+              <div class="col-sm-6">
+                 <div role="group" class="form-group" id="__BVID__921">
+                    <label for="nacimiento" class="d-block" >Fecha de nacimiento</label>
+                    <div>
+                       <input name="nacimiento" type="date" placeholder="Fecha de nacimiento" class="form-control" id="nacimiento">
+                    </div>
+                 </div>
+              </div>
+
+              <div class="col-sm-6">
+               <div role="group" class="form-group" >
+                  <label for="direccion" class="d-block" >Dirección</label>
+                  <div>
+                     <input name="direccion" type="text" placeholder="Dirección" class="form-control" id="direccion">
+                  </div>
+               </div>
+               </div>
+               <div class="col-sm-6">
+                  <div class="form-group" >
+                     <label for="ciudad" class="form-label" >Ciudad</label>
+                        <select
+                            class="form-select"
+                            id="menuciudad"
+                            required
+                            name="menuciudad"
+                        >
+                            <option value="0">Seleccione ciudad</option>
+                            <option value="1">Cartagena</option>
+                            <option value="2">Barranquilla</option>
+                            <option value="3">Cali</option>
+                        </select>
+  
+                  </div>
+               </div>
+
+               
+              <div class="mt-75 col-12">
+              <div class="col-12">
+                 <button type="submit" class="btn mt-2 mr-1 btn-primary"> Save changes </button>
+            </div>
+           </div>
+        </form>
+     </div>
+</div>
+    {% endblock content2 %}

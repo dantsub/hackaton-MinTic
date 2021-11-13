@@ -434,5 +434,22 @@ def before_request():
         return redirect(url_for('login'))
 
 
+
+@app.route('/perfil')
+def perfil():
+    return render_template('modules/perfil.html')
+
+@app.route('/perfil/general')
+def general():
+    return render_template('modules/perfil/general.html')
+
+@app.route('/perfil/password')
+def password():
+    return render_template('modules/perfil/password.html')
+
+@app.route('/perfil2')
+def perfil2():
+    return render_template('modules/perfilcopy.html')
+
 if __name__ == '__main__':
     app.run(debug=True, port=5504)
